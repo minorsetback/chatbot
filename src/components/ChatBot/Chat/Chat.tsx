@@ -16,6 +16,7 @@ type Emoji = {
 const Chat: React.FC = () => {
   const chatRef = useRef<HTMLDivElement>(null);
   const emojiRef = useRef<HTMLDivElement>(null);
+  const smileRef = useRef<HTMLImageElement>(null);
 
   const [message, setMessage] = useState("");
   const [isShowEmoji, setIsShowEmoji] = useState(false);
@@ -76,7 +77,9 @@ const Chat: React.FC = () => {
     function handleClickOutside(event: any) {
       if (
         emojiRef.current &&
-        !emojiRef?.current?.children[0]?.contains(event.target)
+        !emojiRef?.current?.children[0]?.contains(event.target) &&
+        smileRef.current &&
+        !smileRef?.current?.contains(event.target)
       ) {
         setIsShowEmoji((prev) => !prev);
       }
@@ -88,7 +91,7 @@ const Chat: React.FC = () => {
   }, []);
 
   return (
-    <div className=" bg-chat bg-no-repeat bg-cover min-h-chat-h flex flex-col justify-between p-[13px] pt-0 pb-[14px]">
+    <div className="bg-chat bg-no-repeat bg-cover min-h-chat-h flex flex-col justify-between p-[13px] pt-0 pb-[14px]">
       <div
         className="no-scrollbar overflow-y-scroll grow max-h-messages-h flex flex-col gap-[23px] first:mt-[13px] pb-[15px]"
         ref={chatRef}
@@ -124,6 +127,7 @@ const Chat: React.FC = () => {
         <div className="w-full flex justify-between items-center gap-2 py-[16px] pr-[10px] pl-[8px] rounded-[17px] bg-[#f6f6f6] shadow-input-shadow">
           <Image
             src={smile}
+            ref={smileRef}
             width={28}
             height={28}
             alt="smile"
