@@ -1,0 +1,23 @@
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: linear-gradient(93deg, #2228ac 26.59%, #3c96bd 104.29%);
+  padding: 14px 0;
+}
+
+.footer__wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.footer__wrapper_text {
+  color: #f9f9f9;
+  font-family: "Inter";
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}

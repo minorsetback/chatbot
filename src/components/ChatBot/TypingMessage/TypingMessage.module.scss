@@ -1,0 +1,77 @@
+.typing {
+  position: relative;
+  left: -9999px;
+  width: 8px;
+  height: 8px;
+  border-radius: 5px;
+  background-color: gray;
+  color: gray;
+  box-shadow: 9999px 0 0 0 gray;
+  animation: typing 1s infinite linear;
+  animation-delay: 0.1s;
+}
+.typing::before,
+.typing::after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  top: 0;
+}
+.typing::before {
+  width: 8px;
+  height: 8px;
+  border-radius: 5px;
+  background-color: gray;
+  color: gray;
+  animation: typing-before 1s infinite linear;
+  animation-delay: 0s;
+}
+.typing::after {
+  width: 8px;
+  height: 8px;
+  border-radius: 5px;
+  background-color: gray;
+  color: gray;
+  animation: typing-after 1s infinite linear;
+  animation-delay: 0.2s;
+}
+
+@keyframes typing {
+  0% {
+    box-shadow: 9999px -10px 0 0 rgba(152, 128, 255, 0);
+  }
+  25%,
+  50%,
+  75% {
+    box-shadow: 9999px 0 0 0 gray;
+  }
+  100% {
+    box-shadow: 9999px 10px 0 0 rgba(152, 128, 255, 0);
+  }
+}
+@keyframes typing-before {
+  0% {
+    box-shadow: 9984px -10px 0 0 rgba(152, 128, 255, 0);
+  }
+  25%,
+  50%,
+  75% {
+    box-shadow: 9984px 0 0 0 gray;
+  }
+  100% {
+    box-shadow: 9984px 10px 0 0 rgba(152, 128, 255, 0);
+  }
+}
+@keyframes typing-after {
+  0% {
+    box-shadow: 10014px -10px 0 0 rgba(152, 128, 255, 0);
+  }
+  25%,
+  50%,
+  75% {
+    box-shadow: 10014px 0 0 0 gray;
+  }
+  100% {
+    box-shadow: 10014px 10px 0 0 rgba(152, 128, 255, 0);
+  }
+}
