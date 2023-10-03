@@ -1,13 +1,13 @@
 import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import useVoiceflow from "@/hooks/useVoiceflow";
+import { toast } from "react-toastify";
+import TypingMessage from "../TypingMessage/TypingMessage";
 //images
 import smile from "@images/icons/smile.svg";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import send from "@images/icons/send.svg";
-import { useEffect, useRef, useState } from "react";
-import useVoiceflow from "@/hooks/useVoiceflow";
-import { toast } from "react-toastify";
-import TypingMessage from "../TypingMessage/TypingMessage";
 
 type Emoji = {
   native: string;
