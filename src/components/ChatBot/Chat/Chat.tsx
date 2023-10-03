@@ -1,23 +1,38 @@
 import Image from "next/image";
-import styles from "./Chat.module.scss";
 //images
 import smile from "@images/icons/smile.svg";
-import select_file from "@images/icons/select_file.svg";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 import send from "@images/icons/send.svg";
 import { useEffect, useRef, useState } from "react";
 import useVoiceflow from "@/hooks/useVoiceflow";
 import { toast } from "react-toastify";
 import TypingMessage from "../TypingMessage/TypingMessage";
 
+type Emoji = {
+  native: string;
+};
+
 const Chat: React.FC = () => {
-  const chat = useRef<HTMLDivElement>(null);
+  const chatRef = useRef<HTMLDivElement>(null);
+  const emojiRef = useRef<HTMLDivElement>(null);
 
   const [message, setMessage] = useState("");
+  const [isShowEmoji, setIsShowEmoji] = useState(false);
   const { flow, isLoading, handleSend, handleLaunch } = useVoiceflow();
+
+  const handleAddEmoji = ({ native }: Emoji) => {
+    setMessage((inputValue) => inputValue + native);
+  };
+
+  const handleShowEmoji = () => {
+    setIsShowEmoji((prev) => !prev);
+  };
 
   const handleScrollToBottom = () => {
     setTimeout(() => {
-      chat.current && (chat.current.scrollTop = chat.current?.scrollHeight);
+      chatRef.current &&
+        (chatRef.current.scrollTop = chatRef.current?.scrollHeight);
     }, 100);
   };
 
@@ -57,34 +72,75 @@ const Chat: React.FC = () => {
     handleScrollToBottom();
   }, [flow]);
 
+  useEffect(() => {
+    function handleClickOutside(event: any) {
+      if (
+        emojiRef.current &&
+        !emojiRef?.current?.children[0]?.contains(event.target)
+      ) {
+        setIsShowEmoji((prev) => !prev);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className={styles.chat}>
-      <div className={styles.chat__messages} ref={chat}>
+    <div className=" bg-chat bg-no-repeat bg-cover min-h-chat-h flex flex-col justify-between p-[13px] pt-0 pb-[14px]">
+      <div
+        className="no-scrollbar overflow-y-scroll grow max-h-messages-h flex flex-col gap-[23px] first:mt-[13px] pb-[15px]"
+        ref={chatRef}
+      >
         {flow?.map((item, index) => {
           if (item.reply) {
             return (
-              <div className={styles.chat__message_received} key={index}>
+              <div
+                className=" rounded-reseived text-black bg-[#defcfc] mr-auto  max-w-[70%] font-inter text-[18px] font-normal py-[10px] px-[20px]"
+                key={index}
+              >
                 {item.message}
               </div>
             );
           } else {
             return (
-              <div className={styles.chat__message_sent} key={index}>
+              <div
+                className=" rounded-send text-[#fff] bg-[#3531fd] ml-auto  max-w-[70%] font-inter text-[18px] font-normal py-[10px] px-[20px]"
+                key={index}
+              >
                 {item.message}
               </div>
             );
           }
         })}
         {isLoading && (
-          <div className={styles.chat__message_received}>
+          <div className=" rounded-reseived text-black bg-[#defcfc] mr-auto  max-w-[70%] font-inter text-[18px] font-normal py-[10px] px-[20px]">
             <TypingMessage />
           </div>
         )}
       </div>
-      <div className={styles.chat__message_box}>
-        <div className={styles.chat__message_input}>
-          <Image src={smile} width={28} height={28} alt="smile" />
+      <div className="w-full flex justify-between items-center gap-1">
+        <div className="w-full flex justify-between items-center gap-2 py-[16px] pr-[10px] pl-[8px] rounded-[17px] bg-[#f6f6f6] shadow-input-shadow">
+          <Image
+            src={smile}
+            width={28}
+            height={28}
+            alt="smile"
+            className="cursor-pointer hidden md:block"
+            onClick={handleShowEmoji}
+          />
+          {isShowEmoji && (
+            <div className="absolute bottom-36" ref={emojiRef}>
+              <Picker
+                data={data}
+                onEmojiSelect={handleAddEmoji}
+                theme={"light"}
+              />
+            </div>
+          )}
           <input
+            className="border-none w-full h-auto bg-[#f6f6f6] text-black font-inter text-base tracking-wider font-medium mb-1 focus:outline-none"
             placeholder="Chiedimi ciò che vuoi..."
             type="text"
             required
@@ -92,9 +148,10 @@ const Chat: React.FC = () => {
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={handleSendMessageByEnterClick}
           />
-          <Image src={select_file} width={26} height={26} alt="select_file" />
+          {/* <Image src={select_file} width={26} height={26} alt="select_file" /> */}
         </div>
         <Image
+          className=" cursor-pointer"
           src={send}
           width={46}
           height={42}
